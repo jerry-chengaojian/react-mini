@@ -7,11 +7,11 @@ function createElement(
 ): VNode {
   const normalizedProps: Props = { ...props }
   
-  // 处理 children
+  // 处理 children，添加扁平化处理
   if (children.length > 0) {
-    normalizedProps.children = children.map(child => 
-      normalizeChild(child)
-    ).filter(Boolean) as VNode[]
+    normalizedProps.children = flattenChildren(children)
+      .map(child => normalizeChild(child))
+      .filter(Boolean) as VNode[]
   }
 
   return {
@@ -20,6 +20,18 @@ function createElement(
     key: props?.key ?? null,
     ref: props?.ref ?? null
   }
+}
+
+// 添加扁平化函数
+function flattenChildren(children: Child[]): Child[] {
+  return children.reduce((flat: Child[], child: Child) => {
+    if (Array.isArray(child)) {
+      flat.push(...flattenChildren(child))
+    } else {
+      flat.push(child)
+    }
+    return flat
+  }, [])
 }
 
 function normalizeChild(child: Child): VNode | null {

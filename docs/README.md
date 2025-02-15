@@ -42,22 +42,28 @@ createElement(
 
 ### render
 
-将虚拟 DOM 渲染到真实 DOM 容器中。
+将虚拟 DOM 渲染到真实 DOM 容器中，或更新已存在的 DOM。
 
 ```typescript
-render(vnode: VNode, container: Element): Node
+render(vnode: VNode, container: Element, oldDom?: Node): Node
 ```
 
 #### 参数
 
 - `vnode`: 虚拟 DOM 节点
 - `container`: 真实 DOM 容器
+- `oldDom`: (可选) 需要更新的已存在 DOM 节点
 
 #### 示例
 
 ```typescript
+// 首次渲染
 const app = createElement("div", null, "Hello World");
 render(app, document.getElementById("root"));
+
+// 更新已存在的 DOM
+const updatedApp = createElement("div", null, "Updated Content");
+render(updatedApp, document.getElementById("root"), existingDom);
 ```
 
 ## 组件
@@ -133,3 +139,4 @@ createElement 会对子节点进行标准化处理：
 - 字符串和数字会被转换为文本节点
 - null、undefined 和 boolean 值会被忽略
 - VNode 对象会被直接使用
+- 嵌套数组会被自动扁平化（如 `[1, [2, 3], 4]` 会被处理为 `[1, 2, 3, 4]`）
