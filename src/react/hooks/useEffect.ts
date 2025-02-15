@@ -21,8 +21,8 @@ export function useEffect(callback: () => void | (() => void), deps?: any[]) {
   
   // 检查依赖项是否变化
   const depsChanged = !deps || !effect.deps || 
-    deps.length !== effect.deps.length ||
-    deps.some((dep, i) => dep !== effect.deps[i]);
+    deps.length !== effect.deps?.length ||
+    deps.some((dep, i) => dep !== effect.deps?.[i]);
 
   if (depsChanged || !effect.hasRun) {
     // 执行清理函数

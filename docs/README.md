@@ -193,3 +193,55 @@ function Counter() {
   );
 }
 ```
+
+### useEffect
+
+用于在函数组件中执行副作用操作的 Hook。
+
+```typescript
+function useEffect(callback: () => void | (() => void), deps?: any[]): void;
+```
+
+#### 参数
+
+- `callback`: 包含副作用代码的函数，可以返回一个清理函数
+- `deps`: (可选) 依赖项数组。只有当依赖项改变时，effect 才会重新执行
+
+#### 示例
+
+```typescript
+// 基础用法
+function Example() {
+  useEffect(() => {
+    document.title = "New Title";
+  });
+}
+
+// 带依赖项的 effect
+function Counter({ id }) {
+  const [count, setCount] = useState(0);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCount((c) => c + 1);
+    }, 1000);
+
+    // 返回清理函数
+    return () => clearInterval(timer);
+  }, [id]); // 只在 id 改变时重新执行
+
+  return createElement("div", null, `Count: ${count}`);
+}
+
+// 清理副作用
+function ChatRoom({ roomId }) {
+  useEffect(() => {
+    // 设置订阅
+    const connection = createConnection(roomId);
+    connection.connect();
+
+    // 清理订阅
+    return () => connection.disconnect();
+  }, [roomId]);
+}
+```
