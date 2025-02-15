@@ -1,9 +1,12 @@
 import createElement from './createElement'
+import { useState } from './hooks/useState'
 
 export {
-  createElement
+  createElement,
+  useState
 }
 
 export default {
-  createElement
+  createElement,
+  useState
 } 
