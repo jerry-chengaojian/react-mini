@@ -19,5 +19,6 @@ declare function createElement(
 declare module '@/react' {
   const createElement: typeof globalThis.createElement;
   const useState: <S>(initialState: S) => [S, (action: S | ((prev: S) => S)) => void];
-  export { createElement, useState };
+  const useEffect: (callback: () => void | (() => void), deps?: any[]) => void;
+  export { createElement, useState, useEffect };
 } 

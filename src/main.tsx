@@ -1,4 +1,4 @@
-import { createElement, useState } from '@/react'
+import { createElement, useState, useEffect } from '@/react'
 import { render } from '@/react-dom'
 
 // 使用 JSX 语法的函数组件
@@ -8,6 +8,14 @@ function Welcome({ name }: { name: string }) {
 
 function Counter() {
   const [count, setCount] = useState(0);
+  
+  useEffect(() => {
+    document.title = `Count is ${count}`;
+    // 清理函数
+    return () => {
+      document.title = 'React Mini';
+    };
+  }, [count]); // 依赖于 count
   
   return (
     <button onClick={() => setCount(count + 1)}>

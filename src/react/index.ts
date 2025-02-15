@@ -1,12 +1,15 @@
 import createElement from './createElement'
 import { useState } from './hooks/useState'
+import { useEffect } from './hooks/useEffect'
 
 export {
   createElement,
-  useState
+  useState,
+  useEffect
 }
 
 export default {
   createElement,
-  useState
+  useState,
+  useEffect
 } 
