@@ -10,4 +10,10 @@ export type HookState = {
   hooks: Hook[];
   currentHook: number;
   currentComponent: Function | null;
-}; 
+};
+
+export interface Effect {
+  deps?: any[];
+  cleanup?: void | (() => void);
+  hasRun: boolean;
+} 
