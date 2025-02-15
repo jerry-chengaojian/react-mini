@@ -15,7 +15,8 @@ const app = (
 )
 
 // 渲染到 DOM
-const container = document.getElementById('app')
-if (container) {
-  render(app, container)
-} 
+const root = document.getElementById('app')
+if (!root) {
+  throw new Error('Root element not found')
+}
+render(app, root) 
