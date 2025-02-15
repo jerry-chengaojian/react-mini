@@ -8,6 +8,10 @@ function Welcome({ name }: { name: string }) {
 
 function Counter() {
   const [count, setCount] = useState(0);
+  const handleClick = () => {
+    console.log('handleClick', count)
+    setCount(count + 1)
+  }
   
   useEffect(() => {
     document.title = `Count is ${count}`;
@@ -18,7 +22,7 @@ function Counter() {
   }, [count]); // 依赖于 count
   
   return (
-    <button onClick={() => setCount(count + 1)}>
+    <button onClick={handleClick}>
       Count: {count}
     </button>
   );

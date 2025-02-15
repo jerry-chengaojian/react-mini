@@ -54,21 +54,23 @@ function createDom(vnode: VNode): Node {
 function createComponent(vnode: VNode): Node {
   const component = vnode.type as Function
   const props = vnode.props
-  
+  let currentDom: Node
+
   // 创建更新触发器
   hookState.scheduleUpdate = createUpdateTrigger({
     type: component,
     props,
     updateDOM: (newVNode: VNode) => {
       const newDom = createDom(newVNode)
-      dom.parentNode?.replaceChild(newDom, dom)
+      currentDom.parentNode?.replaceChild(newDom, currentDom)
+      currentDom = newDom
       return newDom
     }
   })
   
   const renderedVNode = component(props)
-  const dom = createDom(renderedVNode)
-  return dom
+  currentDom = createDom(renderedVNode)
+  return currentDom
 }
 
 // 添加更新 DOM 的函数
@@ -128,10 +130,20 @@ function updateAttributes(dom: HTMLElement, newProps: Record<string, any>) {
       Object.assign(dom.style, value)
     } else if (key.startsWith('on')) {
       const eventName = key.slice(2).toLowerCase()
-      // 添加类型断言确保 value 是 EventListener
       const eventListener = value as EventListener
+      
+      // 移除旧的事件监听器
+      const oldListener = (dom as any)._eventListeners?.[eventName]
+      if (oldListener) {
+        dom.removeEventListener(eventName, oldListener)
+      }
+      
+      // 添加新的事件监听器
       dom.addEventListener(eventName, eventListener)
-      ;(dom as any)._eventListeners[eventName] = eventListener
+      ;(dom as any)._eventListeners = {
+        ...((dom as any)._eventListeners || {}),
+        [eventName]: eventListener
+      }
     } else if (key === 'className') {
       dom.setAttribute('class', value)
     } else {
