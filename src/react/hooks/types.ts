@@ -10,6 +10,7 @@ export type HookState = {
   hooks: Hook[];
   currentHook: number;
   currentComponent: Function | null;
+  scheduleUpdate: (() => void) | null;
 };
 
 export interface Effect {

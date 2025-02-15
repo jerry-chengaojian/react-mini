@@ -1,4 +1,4 @@
-import { createElement } from '@/react'
+import { createElement, useState } from '@/react'
 import { render } from '@/react-dom'
 
 // 使用 JSX 语法的函数组件
@@ -6,10 +6,21 @@ function Welcome({ name }: { name: string }) {
   return <h1>Hello, {name}</h1>
 }
 
+function Counter() {
+  const [count, setCount] = useState(0);
+  
+  return (
+    <button onClick={() => setCount(count + 1)}>
+      Count: {count}
+    </button>
+  );
+}
+
 // 使用 JSX 语法创建根组件
 const app = (
   <div className="container">
     <Welcome name="React Mini" />
+    <Counter />
     <p>This is a minimal React implementation.</p>
   </div>
 )

@@ -1,5 +1,6 @@
 import { VNode } from '../../react/createElement/types'
 import { isFunction } from '../../shared/utils'
+import { hookState, createUpdateTrigger } from '../../react/hooks/hookState'
 
 function render(vnode: VNode, container: Element, oldDom?: Node) {
   if (oldDom) {
@@ -53,8 +54,21 @@ function createDom(vnode: VNode): Node {
 function createComponent(vnode: VNode): Node {
   const component = vnode.type as Function
   const props = vnode.props
+  
+  // 创建更新触发器
+  hookState.scheduleUpdate = createUpdateTrigger({
+    type: component,
+    props,
+    updateDOM: (newVNode: VNode) => {
+      const newDom = createDom(newVNode)
+      dom.parentNode?.replaceChild(newDom, dom)
+      return newDom
+    }
+  })
+  
   const renderedVNode = component(props)
-  return createDom(renderedVNode)
+  const dom = createDom(renderedVNode)
+  return dom
 }
 
 // 添加更新 DOM 的函数

@@ -14,19 +14,13 @@ export function useState<S>(initialState: S): [S, Dispatch<SetStateAction<S>>] {
 
   const hook = hooks[currentHook];
 
-  // 处理更新队列
-  if (hook.queue.length > 0) {
-    hook.queue.forEach((action: SetStateAction<S>) => {
-      hook.state = typeof action === 'function'
-        ? (action as (prev: S) => S)(hook.state)
-        : action;
-    });
-    hook.queue = [];
-  }
-
-  // 创建 dispatch 函数
-  const setState: Dispatch<SetStateAction<S>> = (action: SetStateAction<S>) => {
+  // 创建更新函数
+  const setState = (action: SetStateAction<S>) => {
     hook.queue.push(action);
+    // 触发更新
+    if (hookState.scheduleUpdate) {
+      hookState.scheduleUpdate();
+    }
   };
 
   hookState.currentHook++;
