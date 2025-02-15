@@ -140,3 +140,56 @@ createElement 会对子节点进行标准化处理：
 - null、undefined 和 boolean 值会被忽略
 - VNode 对象会被直接使用
 - 嵌套数组会被自动扁平化（如 `[1, [2, 3], 4]` 会被处理为 `[1, 2, 3, 4]`）
+
+## Hooks
+
+### useState
+
+用于在函数组件中添加状态管理的 Hook。
+
+```typescript
+function useState<S>(
+  initialState: S | (() => S)
+): [S, Dispatch<SetStateAction<S>>];
+```
+
+#### 参数
+
+- `initialState`: 初始状态值或返回初始状态的函数
+
+#### 返回值
+
+返回一个数组，包含：
+
+- 当前状态值
+- 更新状态的函数
+
+#### 示例
+
+```typescript
+// 基础用法
+function Counter() {
+  const [count, setCount] = useState(0);
+  return createElement(
+    "button",
+    { onClick: () => setCount(count + 1) },
+    `Count: ${count}`
+  );
+}
+
+// 使用函数初始化
+function ExpensiveInitialState() {
+  const [state, setState] = useState(() => expensiveComputation());
+  // ...
+}
+
+// 使用函数更新
+function Counter() {
+  const [count, setCount] = useState(0);
+  return createElement(
+    "button",
+    { onClick: () => setCount((prev) => prev + 1) },
+    `Count: ${count}`
+  );
+}
+```
